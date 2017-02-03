@@ -1,0 +1,13 @@
+name: camo
+version: 0.1.0
+
+authors:
+  - RX14 <chris@rx14.co.uk>
+
+targets:
+  camo:
+    main: camo.cr
+
+crystal: 0.20.5
+
+license: MIT

@@ -4,6 +4,10 @@ A crystal version of [Camo](https://github.com/atmos/camo), faster and with bett
 
 Camo.cr proxies images with the intent of allowing insecure images to be used on sites with tls without mixed-content warnings.
 
+## Why?
+
+The original nodejs camo code is fragile and hard to debug in production. As it's not a particularly long piece of code, I could write a replacement in a single day, with vastly better error handling and request tracing. Plus it's a fun challenge.
+
 ## Installation
 
 Inside a checked-out version of this repo:

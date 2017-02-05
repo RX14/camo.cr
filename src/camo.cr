@@ -6,7 +6,7 @@ class Camo
 
   KiB = 1024
   MiB = 1024 * KiB
-  GiB = 1024 * KiB
+  GiB = 1024 * MiB
 
   ACCEPTED_MIME_TYPES = Array(String).from_json(
     File.read(File.join(__DIR__, "camo", "mime-types.json"))

@@ -95,8 +95,6 @@ struct Camo::Request
     copy_header "Expires"
     copy_header "Last-Modified"
     copy_header "Content-Length"
-    copy_header "Transfer-Encoding"
-    copy_header "Content-Encoding"
 
     @response.headers["Cache-Control"] ||= "public, max-age=31536000"
     @response.headers["Camo-Host"] = @config.hostname

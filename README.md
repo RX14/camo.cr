@@ -19,6 +19,8 @@ $ shards build --release
 
 The resulting binary will be in `bin/camo`.
 
+Alternatively, a docker container is available at [`rx14/camo.cr`](https://hub.docker.com/r/rx14/camo.cr/). This container is also a drop-in replacement for the `inventid/camo` docker container.
+
 ## Usage
 
 See [atmos/camo's README](https://github.com/atmos/camo/blob/master/README.md).

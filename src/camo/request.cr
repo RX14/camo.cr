@@ -43,7 +43,7 @@ struct Camo::Request
     headers = request_trace.request_headers = HTTP::Headers{
       "Via"        => @config.user_agent,
       "User-Agent" => @config.user_agent,
-      "Accept"     => @request.headers["Accept"] || "image/*",
+      "Accept"     => @request.headers["Accept"]? || "image/*",
     }
 
     new_url = nil

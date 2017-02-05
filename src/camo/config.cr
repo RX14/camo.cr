@@ -66,14 +66,14 @@ class Camo::Config
       @timing_allow_origin = timing_allow_origin
     end
 
-    if debug = ENV["CAMO_DEBUG"]?
+    if debug = ENV["CAMO_LOGGING_ENABLED"]?
       case debug.downcase
-      when "true"
+      when "debug"
         @debug = true
-      when "false"
+      when "disabled"
         @debug = false
       else
-        raise Error.new("ENV[\"CAMO_DEBUG\"] must either be true or false")
+        raise Error.new("ENV[\"CAMO_LOGGING_ENABLED\"] must either be 'debug' or 'disabled'")
       end
     end
   end

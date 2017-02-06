@@ -2,7 +2,7 @@
 
 A crystal version of [Camo](https://github.com/atmos/camo), faster and with better request lifecycle tracing. This is a drop-in replacement which mirrors original camo's configuration and behaviour as closely as possible.
 
-Camo.cr proxies images with the intent of allowing insecure images to be used on sites with tls without mixed-content warnings.
+Camo.cr proxies images with the intent of allowing insecure images to be used on sites with TLS without mixed-content warnings.
 
 ## Why?
 

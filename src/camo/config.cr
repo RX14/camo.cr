@@ -9,8 +9,10 @@ class Camo::Config
   getter keep_alive = false
   getter timing_allow_origin : String?
   getter debug = false
+  getter accepted_mime_types : Array(String)
 
   def initialize(@key)
+    @accepted_mime_types = default_accepted_mime_types
   end
 
   def initialize(*, from_env : Bool)
@@ -76,6 +78,21 @@ class Camo::Config
         raise Error.new("ENV[\"CAMO_LOGGING_ENABLED\"] must either be 'debug' or 'disabled'")
       end
     end
+
+    if mime_types_file = ENV["CAMO_MIME_TYPES"]?
+      if File.exists?(mime_types_file)
+        @accepted_mime_types = Array(String).from_json(File.read(mime_types_file))
+      else
+        raise Error.new("ENV[\"CAMO_MIME_TYPES\"] should point to a JSON file with the list of mime-types")
+      end
+    else
+      # default to built-in mime-types list
+      @accepted_mime_types = default_accepted_mime_types
+    end
+  end
+
+  def default_accepted_mime_types
+    Array(String).from_json({{ `cat "#{__DIR__}/mime-types.json"`.stringify }})
   end
 
   class Error < Exception

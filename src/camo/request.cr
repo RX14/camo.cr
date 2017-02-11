@@ -87,7 +87,7 @@ struct Camo::Request
     return error(500, "No Content-Type returned") unless content_type
 
     content_type_prefix = content_type.split(';', 2)[0].downcase
-    return error(500, "Non-image Content-Type returned: #{content_type_prefix}") unless ACCEPTED_MIME_TYPES.includes? content_type_prefix
+    return error(500, "Non-image Content-Type returned: #{content_type_prefix}") unless @config.accepted_mime_types.includes? content_type_prefix
 
     copy_header "Content-Type"
     copy_header "Cache-Control"

@@ -8,10 +8,6 @@ class Camo
   MiB = 1024 * KiB
   GiB = 1024 * MiB
 
-  ACCEPTED_MIME_TYPES = Array(String).from_json(
-    File.read(File.join(__DIR__, "camo", "mime-types.json"))
-  )
-
   # NOTE: use Atomic after parallelism
   @total_requests = 0
   @processing_requests = 0

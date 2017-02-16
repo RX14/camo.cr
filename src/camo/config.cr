@@ -10,6 +10,7 @@ class Camo::Config
   getter timing_allow_origin : String?
   getter debug = false
   getter accepted_mime_types : Array(String)
+  getter accept_ratio : Float64 = 1f64
 
   def initialize(@key)
     @accepted_mime_types = default_accepted_mime_types
@@ -88,6 +89,12 @@ class Camo::Config
     else
       # default to built-in mime-types list
       @accepted_mime_types = default_accepted_mime_types
+    end
+
+    if accept_ratio = ENV["CAMO_ACCEPT_RATIO"]?
+      accept_ratio = accept_ratio.to_f?
+      raise Error.new("ENV[\"CAMO_ACCEPT_RATIO\"] was not a float") unless accept_ratio
+      @accept_ratio = accept_ratio
     end
   end
 

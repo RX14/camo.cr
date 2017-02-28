@@ -3,7 +3,7 @@ class Camo::Config
   getter key : String
   getter hostname = "unknown"
   getter user_agent = "Camo.cr Asset Proxy #{VERSION}"
-  getter length_limit : Int32 = 5 * MiB
+  getter length_limit : Int32 = 10 * MiB
   getter socket_timeout : Time::Span = 10.seconds
   getter max_redirects = 4
   getter keep_alive = false

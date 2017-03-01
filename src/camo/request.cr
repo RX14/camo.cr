@@ -113,7 +113,7 @@ struct Camo::Request
   end
 
   private def parse_url
-    path_parts = @request.path.chomp('/').lchomp('/').split('/', 2)
+    path_parts = @request.path.chomp('/').lchop('/').split('/', 2)
 
     case path_parts.size
     when 1

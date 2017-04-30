@@ -1,4 +1,4 @@
-FROM crystallang/crystal:0.20.5
+FROM crystallang/crystal:0.22.0
 
 ADD . /app/
 WORKDIR /app/

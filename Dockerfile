@@ -4,7 +4,7 @@ ADD . /app/
 WORKDIR /app/
 
 RUN shards install \
- && shards build --release camo
+ && shards build camo
 
 EXPOSE 8081
 USER nobody

@@ -135,7 +135,8 @@ struct Camo::Request
 
   private def error(status_code, message)
     @trace.response_reason = message
-    @response.puts(message)
+    dest_url = parse_url.try { |t| t[1] }
+    @response.puts("#{dest_url}: #{message}")
     @response.status_code = status_code
 
     nil

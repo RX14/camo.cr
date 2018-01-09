@@ -65,6 +65,7 @@ class Camo
           # Don't cache errors
           unless 200 <= context.response.status_code <= 299
             context.response.headers["Cache-Control"] = "no-cache, no-store, private, must-revalidate"
+            context.response.headers["Expires"] = "0"
           end
 
           trace.response_status_code = context.response.status_code

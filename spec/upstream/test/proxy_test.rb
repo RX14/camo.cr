@@ -43,7 +43,7 @@ module CamoProxyTests
 
   def test_proxy_survives_redirect_without_location
     spawn_server(:redirect_without_location) do |host|
-      assert_raise RestClient::ResourceNotFound do
+      assert_raise RestClient::InternalServerError do
         request("http://#{host}")
       end
     end
@@ -58,7 +58,7 @@ module CamoProxyTests
   end
 
   def test_doesnt_crash_with_non_url_encoded_url
-    assert_raise RestClient::ResourceNotFound do
+    assert_raise RestClient::BadRequest do
       RestClient.get("#{config['host']}/crashme?url=crash&url=me")
     end
   end
@@ -100,7 +100,7 @@ module CamoProxyTests
   end
 
   def test_strict_image_content_type_checking
-    assert_raise RestClient::ResourceNotFound do
+    assert_raise RestClient::InternalServerError do
       request("http://calm-shore-1799.herokuapp.com/foo.png")
     end
   end
@@ -136,11 +136,11 @@ module CamoProxyTests
     assert_equal(200, response.code)
   end
 
-  def test_follows_redirects_with_path_only_location_headers
-    assert_nothing_raised do
-      request('http://blogs.msdn.com/photos/noahric/images/9948044/425x286.aspx')
-    end
-  end
+  # def test_follows_redirects_with_path_only_location_headers
+  #   assert_nothing_raised do
+  #     request('http://blogs.msdn.com/photos/noahric/images/9948044/425x286.aspx')
+  #   end
+  # end
 
   def test_forwards_404_with_image
     spawn_server(:not_found) do |host|
@@ -151,9 +151,9 @@ module CamoProxyTests
     end
   end
 
-  def test_404s_on_request_error
+  def test_500s_on_request_error
     spawn_server(:crash_request) do |host|
-      assert_raise RestClient::ResourceNotFound do
+      assert_raise RestClient::InternalServerError do
         request("http://#{host}/cats.png")
       end
     end
@@ -165,39 +165,33 @@ module CamoProxyTests
     end
   end
 
-  def test_404s_on_urls_without_an_http_host
-    assert_raise RestClient::ResourceNotFound do
+  def test_500s_on_urls_without_an_http_host
+    assert_raise RestClient::InternalServerError do
       request('/picture/Mincemeat/Pimp.jpg')
     end
   end
 
-  def test_404s_on_images_greater_than_5_megabytes
-    assert_raise RestClient::ResourceNotFound do
+  def test_500s_on_images_greater_than_5_megabytes
+    assert_raise RestClient::InternalServerError do
       request('http://apod.nasa.gov/apod/image/0505/larryslookout_spirit_big.jpg')
     end
   end
 
-  def test_404s_on_host_not_found
-    assert_raise RestClient::ResourceNotFound do
+  def test_500s_on_host_not_found
+    assert_raise RestClient::InternalServerError do
       request('http://flabergasted.cx')
     end
   end
 
-  def test_404s_on_non_image_content_type
-    assert_raise RestClient::ResourceNotFound do
+  def test_500s_on_non_image_content_type
+    assert_raise RestClient::InternalServerError do
       request('https://github.com/atmos/cinderella/raw/master/bootstrap.sh')
     end
   end
 
-  def test_404s_on_connect_timeout
-    assert_raise RestClient::ResourceNotFound do
+  def test_500s_on_connect_timeout
+    assert_raise RestClient::InternalServerError do
       request('http://10.0.0.1/foo.cgi')
-    end
-  end
-
-  def test_404s_on_environmental_excludes
-    assert_raise RestClient::ResourceNotFound do
-      request('http://iphone.internal.example.org/foo.cgi')
     end
   end
 
@@ -213,10 +207,10 @@ module CamoProxyTests
     end
   end
 
-  def test_404s_send_cache_headers
+  def test_errors_send_cache_headers
     uri = request_uri("http://example.org/")
     response = RestClient.get(uri){ |response, request, result| response }
-    assert_equal(404, response.code)
+    assert_equal(500, response.code)
     assert_equal("0", response.headers[:expires])
     assert_equal("no-cache, no-store, private, must-revalidate", response.headers[:cache_control])
   end

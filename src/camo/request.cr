@@ -83,6 +83,11 @@ struct Camo::Request
     content_length = upstream_response.headers["Content-Length"]?.try(&.to_i?) || 0
     return error(500, "Content-Length limit exceeded (at #{dest_url.inspect})") if content_length > @config.length_limit
 
+    if upstream_response.status_code >= 400
+      body = String.build { |str| IO.copy(upstream_response.body_io, str, 8192) }.inspect
+      return error(upstream_response.status_code, "Upstream failed at #{dest_url.inspect} with body: #{body}")
+    end
+
     content_type = upstream_response.headers["Content-Type"]?
     return error(500, "No Content-Type returned (at #{dest_url.inspect})") unless content_type
 

@@ -120,12 +120,12 @@ struct Camo::Request
       digest = @trace.provided_digest = path_parts[0]
       dest_url = @trace.provided_url = @request.query_params["url"]?
 
-      return error(400, "No url query parameter set") unless dest_url
+      return error(400, "No url query parameter set", nil) unless dest_url
     when 2
       digest = @trace.provided_digest = path_parts[0]
       dest_url = @trace.provided_url = Util.hex_decode(path_parts[1])
 
-      return error(400, "Image url was not valid hex (#{path_parts[1]})") unless dest_url
+      return error(400, "Image url was not valid hex (#{path_parts[1]})", nil) unless dest_url
     else
       raise "Impossible path_parts size"
     end
@@ -133,9 +133,8 @@ struct Camo::Request
     {digest, dest_url}
   end
 
-  private def error(status_code, message)
+  private def error(status_code, message, dest_url = parse_url.try { |t| t[1] })
     @trace.response_reason = message
-    dest_url = parse_url.try { |t| t[1] }
     @response.puts("#{dest_url}: #{message}")
     @response.status_code = status_code
 

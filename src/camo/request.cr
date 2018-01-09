@@ -38,7 +38,7 @@ struct Camo::Request
     @trace.intermediate_requests << request_trace
     request_trace.url = dest_url.to_s
 
-    return error(500, "Exceeded max redirects") if redirects < 0
+    return error(500, "Exceeded max redirects (at #{dest_url.to_s.inspect})") if redirects < 0
 
     headers = request_trace.request_headers = HTTP::Headers{
       "Via"        => @config.user_agent,
@@ -65,7 +65,7 @@ struct Camo::Request
           new_url.scheme = dest_url.scheme unless new_url.scheme
           new_url.port = dest_url.port unless new_url.port
         else
-          proxy_response(upstream_response)
+          proxy_response(upstream_response, dest_url.to_s)
         end
       end
     end
@@ -77,17 +77,17 @@ struct Camo::Request
     end
   end
 
-  private def proxy_response(upstream_response)
+  private def proxy_response(upstream_response, dest_url)
     @response.status_code = upstream_response.status_code
 
     content_length = upstream_response.headers["Content-Length"]?.try(&.to_i?) || 0
-    return error(500, "Content-Length limit exceeded") if content_length > @config.length_limit
+    return error(500, "Content-Length limit exceeded (at #{dest_url.inspect})") if content_length > @config.length_limit
 
     content_type = upstream_response.headers["Content-Type"]?
-    return error(500, "No Content-Type returned") unless content_type
+    return error(500, "No Content-Type returned (at #{dest_url.inspect})") unless content_type
 
     content_type_prefix = content_type.split(';', 2)[0].downcase
-    return error(500, "Non-image Content-Type returned: #{content_type_prefix}") unless @config.accepted_mime_types.includes? content_type_prefix
+    return error(500, "Non-image Content-Type returned: #{content_type_prefix} (at #{dest_url.inspect})") unless @config.accepted_mime_types.includes? content_type_prefix
 
     copy_header "Content-Type"
     copy_header "Cache-Control"

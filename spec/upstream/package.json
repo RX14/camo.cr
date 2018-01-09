@@ -1,9 +1,0 @@
-{
-  "name": "camo",
-  "version": "2.3.0",
-  "dependencies": {
-  },
-  "engines": {
-    "node": "^0.10.29"
-  }
-}

@@ -4,7 +4,7 @@ end
 task :build => 'server.js'
 
 task :bundle do
-  sh("bundle install --gemfile test.gemfile")
+  sh("bundle install --path vendor/bundle --gemfile test.gemfile")
 end
 
 desc "Run the tests against localhost"

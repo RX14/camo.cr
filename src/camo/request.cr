@@ -135,8 +135,12 @@ struct Camo::Request
 
   private def error(status_code, message, dest_url = parse_url.try { |t| t[1] })
     @trace.response_reason = message
-    @response.puts("#{dest_url}: #{message}")
+
     @response.status_code = status_code
+    @response.headers["Expires"] = "0"
+    @response.headers["Cache-Control"] = "no-cache, no-store, private, must-revalidate"
+    @response.content_type = "text/plain"
+    @response.puts("#{dest_url}: #{message}")
 
     nil
   end

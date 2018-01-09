@@ -52,6 +52,8 @@ class Camo
         when "/favicon.ico"
           context.response.status_code = 204
         when "/status", "/"
+          context.response.headers["Cache-Control"] = "no-cache, no-store, private, must-revalidate"
+          context.response.headers["Expires"] = "0"
           context.response.puts "ok #{@processing_requests}/#{@total_requests} since #{@start_date}"
         else
           Request.new(context, @config, trace).process

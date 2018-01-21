@@ -25,6 +25,10 @@ struct Camo::Request
       return error(400, message)
     end
 
+    if @config.accept_ratio < 1f64 && rand > @config.accept_ratio
+      return redirect(dest_url)
+    end
+
     # Finally, we perform the HTTP request
     begin
       proxy_request(URI.parse(dest_url))
@@ -148,5 +152,10 @@ struct Camo::Request
     @response.puts("#{dest_url}: #{message}")
 
     nil
+  end
+
+  private def redirect(dest_url)
+    @response.status_code = 302
+    @response.headers["Location"] = dest_url
   end
 end

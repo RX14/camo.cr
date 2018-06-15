@@ -20,7 +20,7 @@ class Camo
   def run
     p @config if @config.debug
 
-    server = HTTP::Server.new("0.0.0.0", @config.port) do |context|
+    server = HTTP::Server.new do |context|
       @total_requests += 1
       @processing_requests += 1
 
@@ -84,8 +84,8 @@ class Camo
       end
     end
 
-    puts "Camo.cr running on http://localhost:#{@config.port}"
-    server.listen
+    puts "Camo.cr running on http://0.0.0.0:#{@config.port}"
+    server.listen("0.0.0.0", @config.port)
   end
 
   private def add_security_headers(response)

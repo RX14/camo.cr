@@ -17,12 +17,7 @@ struct Camo::Request
     # Then we check that the digest matches
     expected_digest = @trace.expected_digest = OpenSSL::HMAC.hexdigest(:sha1, @config.key, dest_url)
     unless digest == expected_digest
-      message = <<-RES
-        Checksum mismatch:
-        Got:      #{digest}
-        Expected: #{expected_digest}
-        RES
-      return error(400, message)
+      return error(400, "Checksum mismatch: incorrect checksum was #{digest} for #{dest_url}")
     end
 
     # Finally, we perform the HTTP request

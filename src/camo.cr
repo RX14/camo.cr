@@ -12,7 +12,7 @@ class Camo
   @total_requests = 0
   @processing_requests = 0
 
-  @start_date = Time.now
+  @start_date = Time.utc
 
   def initialize(@config : Config)
   end
@@ -25,7 +25,7 @@ class Camo
       @processing_requests += 1
 
       trace = Trace.new
-      time_start = Time.now
+      time_start = Time.utc
 
       begin
         trace.raw_request_url = context.request.resource
@@ -70,7 +70,7 @@ class Camo
 
           trace.response_status_code = context.response.status_code
           trace.response_headers = context.response.headers
-          trace.response_time = Time.now - time_start
+          trace.response_time = Time.utc - time_start
         ensure
           if @config.debug
             time_start_str = Time::Format::ISO_8601_DATE_TIME.format(time_start)

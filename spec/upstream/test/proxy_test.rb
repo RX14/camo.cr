@@ -150,8 +150,8 @@ module CamoProxyTests
   end
 
   def test_400s_on_infinidirect
-    assert_raise RestClient::BadRequest do
-      request('http://modeselektor.herokuapp.com/')
+    assert_raise RestClient::InternalServerError do
+      request('https://demo.cyotek.com/features/redirectlooptest.php')
     end
   end
 

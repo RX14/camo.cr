@@ -123,7 +123,7 @@ struct Camo::Request
       return error(400, "No url query parameter set", nil) unless dest_url
     when 2
       digest = @trace.provided_digest = path_parts[0]
-      dest_url = @trace.provided_url = Util.hex_decode(path_parts[1])
+      dest_url = @trace.provided_url = String.new(path_parts[1].hexbytes)
 
       return error(400, "Image url was not valid hex (#{path_parts[1]})", nil) unless dest_url
     else

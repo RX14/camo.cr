@@ -48,7 +48,7 @@ struct Camo::Request
       client.read_timeout = @config.socket_timeout
 
       time_start = Time.monotonic
-      client.get(dest_url.full_path, headers) do |upstream_response|
+      client.get(dest_url.request_target, headers) do |upstream_response|
         request_trace.response_time = Time.monotonic - time_start
         request_trace.response_headers = upstream_response.headers
         request_trace.response_status_code = upstream_response.status_code
